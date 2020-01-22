@@ -19,7 +19,11 @@ public class BasicFileExtensionValidatorTestSuite {
     private static Stream<String> successCases() {
         return Stream.of(testFilesPath + "\\myCode.jpg",
                          testFilesPath + "\\programmingLanguages.gif",
-                         testFilesPath + "\\jpegFile.jpeg"
+                         testFilesPath + "\\jpegFile.jpeg",
+                         testFilesPath + "\\pdfFile.pdf",
+                         testFilesPath + "\\pcapFile.pcap",
+                         testFilesPath + "\\pcapFileSecondSignature.pcap",
+                         testFilesPath + "\\rarFile.rar"
         );
     }
     private static Stream<String> failureCases() {
@@ -68,6 +72,12 @@ public class BasicFileExtensionValidatorTestSuite {
         assertTrue(fileValidator.checkIfFileIsSafe());
     }
 
+    @ParameterizedTest
+    @MethodSource("failureCases")
+    void shouldReturnFalseForAllTestFilesWithBadSignature(String filePath) throws Exception {
+        IFileValidator fileValidator = new BasicFileExtensionValidator(filePath);
+        assertFalse(fileValidator.checkIfFileIsSafe());
+    }
 
 
 
