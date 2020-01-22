@@ -1,7 +1,12 @@
 package EngineUnitTests;
 
+import Engine.BasicFileExtensionValidator;
+import Engine.IFileValidator;
+import org.junit.jupiter.api.Test;
+
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
 
 public class BasicFileExtensionValidatorTestSuite {
     private final static String testFilesPath = Paths.get("exampleFilesToTest").toAbsolutePath().toString();
@@ -19,4 +24,13 @@ public class BasicFileExtensionValidatorTestSuite {
                          testFilesPath + "\\programmingLanguagesBadSig.jpg"
         );
     }
+
+    @Test
+    void shouldNotThrowThrowIfFileDoesExists() throws Exception {
+        IFileValidator fileValidator =  new BasicFileExtensionValidator(testFilesPath + "\\myCode.jpg");
+    }
+
+
+
+
 }
