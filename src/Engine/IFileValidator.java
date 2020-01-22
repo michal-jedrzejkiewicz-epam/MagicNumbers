@@ -1,5 +1,7 @@
 package Engine;
 
+import java.io.IOException;
+
 public interface IFileValidator {
     public static final int SPECIFIC_EXTENSION_SIGNATURES[][] = new int[][]{
             {0xFF, 0xD8, 0xFF, 0xDB}, //jpg
@@ -9,5 +11,5 @@ public interface IFileValidator {
             {0x47, 0x49, 0x46, 0x38, 0x37, 0x61}, //gif - GIF87a
             {0x47, 0x49, 0x46, 0x38, 0x39, 0x61}  //gif - GIF89a
     };
-    public abstract boolean checkIfFileIsSafe();
+    public abstract boolean checkIfFileIsSafe() throws IOException;
 }

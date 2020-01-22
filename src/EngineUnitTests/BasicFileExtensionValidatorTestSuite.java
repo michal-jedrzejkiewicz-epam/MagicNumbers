@@ -4,8 +4,11 @@ import Engine.BasicFileExtensionValidator;
 import Engine.IFileValidator;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class BasicFileExtensionValidatorTestSuite {
@@ -28,6 +31,12 @@ public class BasicFileExtensionValidatorTestSuite {
     @Test
     void shouldNotThrowThrowIfFileDoesExists() throws Exception {
         IFileValidator fileValidator =  new BasicFileExtensionValidator(testFilesPath + "\\myCode.jpg");
+    }
+
+    @Test
+    void shouldThrowIfFileDoesNotExists() {
+        assertThrows(FileNotFoundException.class,
+                     () -> new BasicFileExtensionValidator(testFilesPath + "\\ugabuga.txt"));
     }
 
 
