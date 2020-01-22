@@ -18,9 +18,8 @@ public class BasicFileExtensionValidatorTestSuite {
 
     private static Stream<String> successCases() {
         return Stream.of(testFilesPath + "\\myCode.jpg",
-                         testFilesPath + "\\programmingLanguages.gif"
-                         //TODO handle jpeg
-                         //testFilesPath + "\\jpegFile.jpeg"
+                         testFilesPath + "\\programmingLanguages.gif",
+                         testFilesPath + "\\jpegFile.jpeg"
         );
     }
     private static Stream<String> failureCases() {

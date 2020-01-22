@@ -46,8 +46,12 @@ public class BasicFileExtensionValidator implements IFileValidator {
         while (currentReadingSymbol != -1 && possibleExtensionSignature.size() != 0) {
             ++columnNumber;
             for(int i = 0; i < possibleExtensionSignature.size(); ++i) {
-                if (columnNumber + 1 == SPECIFIC_EXTENSION_SIGNATURES[possibleExtensionSignature.get(i)].length)  {
+                if (columnNumber + 1 == SPECIFIC_EXTENSION_SIGNATURES[possibleExtensionSignature.get(i)].length &&
+                    SPECIFIC_EXTENSION_SIGNATURES[possibleExtensionSignature.get(i)][columnNumber] == currentReadingSymbol )  {
                     return true;
+                }
+                if(SPECIFIC_EXTENSION_SIGNATURES[possibleExtensionSignature.get(i)][columnNumber] == 0xFFF) {
+                    continue;
                 }
                 if (SPECIFIC_EXTENSION_SIGNATURES[possibleExtensionSignature.get(i)][columnNumber] != currentReadingSymbol) {
                     possibleExtensionSignature.remove(i);
@@ -82,6 +86,9 @@ public class BasicFileExtensionValidator implements IFileValidator {
             System.out.println("Signature: " + COMMON_FILE_EXTENSIONS[possibleExtensionSignature.get(0)]);
         } else {
             System.out.println("Signature: unknown");
+        }
+        if(result && !COMMON_FILE_EXTENSIONS[possibleExtensionSignature.get(0)].equals(extensionFromPath)){
+            return false;
         }
 
         return result;
