@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class BasicFileExtensionValidatorTestSuite {
@@ -37,6 +38,20 @@ public class BasicFileExtensionValidatorTestSuite {
     void shouldThrowIfFileDoesNotExists() {
         assertThrows(FileNotFoundException.class,
                      () -> new BasicFileExtensionValidator(testFilesPath + "\\ugabuga.txt"));
+    }
+
+    @Test
+    void shouldReturnTrueForTextFile() throws Exception {
+        BasicFileExtensionValidator fileValidator =
+                new BasicFileExtensionValidator(testFilesPath + "\\bosman.txt");
+        assertTrue(fileValidator.checkIfFileIsSafe());
+    }
+
+    @Test
+    void shouldThrowIfFileIsEmpty() throws Exception {
+        BasicFileExtensionValidator fileValidator =
+                new BasicFileExtensionValidator(testFilesPath + "\\emptyTxtFile.txt");
+        assertThrows(IllegalStateException.class, () -> fileValidator.checkIfFileIsSafe());
     }
 
 

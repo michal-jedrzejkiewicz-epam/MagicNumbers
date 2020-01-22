@@ -31,6 +31,16 @@ public class BasicFileExtensionValidator implements IFileValidator {
         }
     }
 
+    private boolean isTextFile() throws IOException {
+        while (currentReadingSymbol != -1) {
+            if(currentReadingSymbol > 127) {
+                return false;
+            }
+            currentReadingSymbol = fileToCheck.read();
+        }
+        return true;
+    }
+
     @Override
     public boolean checkIfFileIsSafe() throws IOException {
         currentReadingSymbol = fileToCheck.read();
@@ -38,6 +48,14 @@ public class BasicFileExtensionValidator implements IFileValidator {
         if(currentReadingSymbol == -1) {
             throw new IllegalStateException("The file is empty!");
         }
+
+        if(possibleExtensionSignature.size() == 0) {
+            if(isTextFile()){
+                System.out.println("File extension: txt");
+                return true;
+            }
+        }
+
         fillPossibleExtensionSignature();
         return false;
     }
