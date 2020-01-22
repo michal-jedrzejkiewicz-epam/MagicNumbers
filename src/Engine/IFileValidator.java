@@ -11,5 +11,13 @@ public interface IFileValidator {
             {0x47, 0x49, 0x46, 0x38, 0x37, 0x61}, //gif - GIF87a
             {0x47, 0x49, 0x46, 0x38, 0x39, 0x61}  //gif - GIF89a
     };
+    public static final String[] COMMON_FILE_EXTENSIONS = new String[]{
+            "jpg",
+            "jpg",
+            "jpeg",
+            "jpeg",
+            "gif",
+            "gif"
+    };
     public abstract boolean checkIfFileIsSafe() throws IOException;
 }

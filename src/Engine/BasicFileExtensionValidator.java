@@ -41,6 +41,23 @@ public class BasicFileExtensionValidator implements IFileValidator {
         return true;
     }
 
+    private boolean isFileSignatureExists() throws IOException {
+        int columnNumber = -1;
+        while (currentReadingSymbol != -1 && possibleExtensionSignature.size() != 0) {
+            ++columnNumber;
+            for(int i = 0; i < possibleExtensionSignature.size(); ++i) {
+                if (columnNumber + 1 == SPECIFIC_EXTENSION_SIGNATURES[possibleExtensionSignature.get(i)].length)  {
+                    return true;
+                }
+                if (SPECIFIC_EXTENSION_SIGNATURES[possibleExtensionSignature.get(i)][columnNumber] != currentReadingSymbol) {
+                    possibleExtensionSignature.remove(i);
+                }
+            }
+            currentReadingSymbol = fileToCheck.read();
+        }
+        return false;
+    }
+
     @Override
     public boolean checkIfFileIsSafe() throws IOException {
         currentReadingSymbol = fileToCheck.read();
@@ -49,14 +66,24 @@ public class BasicFileExtensionValidator implements IFileValidator {
             throw new IllegalStateException("The file is empty!");
         }
 
+        fillPossibleExtensionSignature();
+
         if(possibleExtensionSignature.size() == 0) {
-            if(isTextFile()){
+            if(isTextFile()) {
                 System.out.println("File extension: txt");
+                System.out.println("Signature: unknown");
                 return true;
             }
         }
 
-        fillPossibleExtensionSignature();
-        return false;
+        boolean result = isFileSignatureExists();
+        System.out.println("File extension: " + extensionFromPath);
+        if(possibleExtensionSignature.size() == 1) {
+            System.out.println("Signature: " + COMMON_FILE_EXTENSIONS[possibleExtensionSignature.get(0)]);
+        } else {
+            System.out.println("Signature: unknown");
+        }
+
+        return result;
     }
 }

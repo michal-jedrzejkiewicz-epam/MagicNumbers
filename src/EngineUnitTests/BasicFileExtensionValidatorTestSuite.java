@@ -3,22 +3,24 @@ package EngineUnitTests;
 import Engine.BasicFileExtensionValidator;
 import Engine.IFileValidator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class BasicFileExtensionValidatorTestSuite {
     private final static String testFilesPath = Paths.get("exampleFilesToTest").toAbsolutePath().toString();
 
-    private static Stream<String> testFilePaths() {
+    private static Stream<String> successCases() {
         return Stream.of(testFilesPath + "\\myCode.jpg",
-                         testFilesPath + "\\programmingLanguages.gif",
-                         testFilesPath + "\\jpegFile.jpeg"
+                         testFilesPath + "\\programmingLanguages.gif"
+                         //TODO handle jpeg
+                         //testFilesPath + "\\jpegFile.jpeg"
         );
     }
     private static Stream<String> failureCases() {
@@ -42,16 +44,29 @@ public class BasicFileExtensionValidatorTestSuite {
 
     @Test
     void shouldReturnTrueForTextFile() throws Exception {
-        BasicFileExtensionValidator fileValidator =
+        IFileValidator fileValidator =
                 new BasicFileExtensionValidator(testFilesPath + "\\bosman.txt");
         assertTrue(fileValidator.checkIfFileIsSafe());
     }
 
     @Test
+    void shouldReturnFalseIfTxtFileContainsBytesValuesAbove127() throws Exception {
+        IFileValidator fileValidator = new BasicFileExtensionValidator(testFilesPath + "\\myCodeText.txt");
+        assertFalse(fileValidator.checkIfFileIsSafe());
+    }
+
+    @Test
     void shouldThrowIfFileIsEmpty() throws Exception {
-        BasicFileExtensionValidator fileValidator =
+        IFileValidator fileValidator =
                 new BasicFileExtensionValidator(testFilesPath + "\\emptyTxtFile.txt");
         assertThrows(IllegalStateException.class, () -> fileValidator.checkIfFileIsSafe());
+    }
+
+    @ParameterizedTest
+    @MethodSource("successCases")
+    void shouldReturnTrueForAllTestFiles(String filePath) throws Exception {
+        IFileValidator fileValidator = new BasicFileExtensionValidator(filePath);
+        assertTrue(fileValidator.checkIfFileIsSafe());
     }
 
 
